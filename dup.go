@@ -5,16 +5,22 @@
 //!+
 
 // Dup1 prints the text of each line that appears more than
-// once in the standard input, preceded by its count.
+// once in the standard input, or its command line args treated as files,
+//  preceded by its count.
 package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 )
 
+var lines = flag.Bool("l", false, "Print lines only without counts.")
+
 func main() {
+
+	flag.Parse()
 	counts := make(map[string]int)
 	files := os.Args[1:]
 	if len(files) == 0 {
@@ -33,7 +39,11 @@ func main() {
 
 	for line, n := range counts {
 		if n > 1 {
-			fmt.Printf("%d\t%s\n", n, line)
+			if !*lines {
+				fmt.Printf("%d\t%s\n", n, line)
+			} else {
+				fmt.Printf("%s\n", line)
+			}
 		}
 	}
 }
